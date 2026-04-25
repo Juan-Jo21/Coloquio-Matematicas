@@ -4,6 +4,8 @@ Recuerden que deben descargar el Tema.sty, ya que pues es el estilo del beamer j
 
 Algunas fuentes puede que no las tengan, tienen que descargarlas o cambiarlas.
 
+SIles da error, es por las imagenes que pues no subí, solo borrenlas, comentenlas o suban las de ustedes.
+
 Los logos los encuentran en la carpeta: img
 
 Recomiendo usar colores de esta página, es muy buena: https://latexcolor.com
