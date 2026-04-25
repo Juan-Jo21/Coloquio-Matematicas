@@ -1,0 +1,244 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{Tema3}[04/09/2025]
+
+\PassOptionsToPackage{
+	paperwidth=16cm,
+	paperheight=9cm,
+	resetpaper
+}{geometry}
+
+\RequirePackage{geometry}
+\RequirePackage{xcolor}
+\RequirePackage[dvipsnames, svgnames]{xcolor}
+\RequirePackage{booktabs}
+\RequirePackage{tabularx}
+\RequirePackage{etoolbox}
+\newcommand{\deedegreelong}{}  % Definición inicial vacía+
+\newcommand{\footerlabel}{}  % Definición inicial vacía
+\RequirePackage{adjustbox} % para ajuste automático	
+
+\newcommand{\footleft}{}  % Parte izquierda
+\newcommand{\footcenter}{} % Parte central
+\newcommand{\footright}{}  % Parte derecha
+
+% ========== Definición de colores ==========
+\definecolor{miColorFondo}{RGB}{50, 100, 150}
+\definecolor{miColorTitulo}{RGB}{255, 165, 0}
+\definecolor{miColorTexto}{RGB}{0, 0, 0}
+\definecolor{DEEblue}{RGB}{18,79,135} 
+\definecolor{lightergray}{RGB}{230,230,230}
+\definecolor{bluegray}{rgb}{0.4, 0.6, 0.8}
+
+% ============================= Mis colores ==============================
+%\definecolor{principal}{HTML}{003f5c} % Azul marino
+%\definecolor{secundario}{HTML}{2f4b7c} % Azul intermedio
+%\definecolor{acento}{HTML}{ffa600} % Naranja vivo
+
+%\definecolor{principal}{named}{NavyBlue}
+%\definecolor{secundario}{named}{SlateGray}
+%\definecolor{acento}{named}{Coral}
+
+\definecolor{principal}{named}{MidnightBlue}
+\definecolor{secundario}{named}{Thistle}
+\definecolor{acento}{named}{Peach}
+%###################
+\definecolor{mainblue}{HTML}{003366}
+\definecolor{secondblue}{HTML}{0073B7}
+\definecolor{accentgreen}{HTML}{00A4B3}
+\definecolor{lightgrey}{HTML}{F0F0F0}
+
+%#########################################
+\definecolor{charcoal}{RGB}{54, 69, 79}
+\definecolor{mint}{RGB}{100, 205, 178}
+\definecolor{mintcream}{RGB}{245, 255, 250}
+
+% ========================================================================
+
+% ========================== Fuentes =====================================
+
+%\newfontfamily\baskerville{Baskerville}
+%\newfontfamily\baskerville{Baskerville Old Face}
+\usepackage{lato}
+
+% ========================================================================
+
+% ========================================================================
+
+% Configuración de Beamer
+\geometry{
+	papersize={16cm,9cm},
+	total={15cm,8cm}, % Ajusta el área utilizable
+	resetpaper
+}
+\setbeamersize{text margin left=0.5cm, text margin right=0.5cm}
+
+% ========================================================================
+
+% ======================= Configuración de colores =======================
+% Texto normal y fondo
+%\setbeamercolor{normal text}{fg=black,bg=bluegray}
+%\setbeamercolor{background canvas}{bg=gray!5}
+\setbeamercolor{normal text}{fg=blue!50!black,bg=mintcream}
+\setbeamercolor{background canvas}{bg=mintcream}
+
+% Títulos
+%\setbeamercolor{title}{fg=white,bg=mainblue} %acento
+%\setbeamercolor{subtitle}{fg=white,bg=blue!50!black}
+%\setbeamercolor{frametitle}{fg=white,bg=mainblue} %secundario
+\setbeamercolor{title}{fg=white,bg=charcoal} %acento
+\setbeamercolor{subtitle}{fg=white,bg=blue!50!black}
+\setbeamercolor{frametitle}{fg=white,bg=Teal} %Color del título de los begin{frame},secundario
+
+% Autor y fecha
+\setbeamercolor{author}{fg=black}
+\setbeamercolor{date}{fg=black}
+
+% Bloques
+%\setbeamercolor{block title}{fg=white,bg=secondblue} % \begin{block}
+%\setbeamercolor{block body}{fg=black,bg=lightgrey}
+\setbeamercolor{block title}{fg=mintcream, bg=charcoal} % Título: Texto claro sobre fondo oscuro (charcoal)
+\setbeamercolor{block body}{fg=charcoal, bg=mintcream!80!white} % Cuerpo: Texto oscuro sobre fondo muy claro
+
+%\setbeamercolor{block title example}{fg=white,bg=green!50!black}
+%\setbeamercolor{block body example}{fg=black,bg=green!10}
+\setbeamercolor{example block title}{fg=charcoal, bg=mint} % Título: Texto oscuro (charcoal) sobre el acento mint
+\setbeamercolor{example block body}{fg=charcoal, bg=mint!15!mintcream} % Cuerpo: Fondo suave de mint (para distinguirlo ligeramente)
+
+%\setbeamercolor{block title alerted}{fg=white,bg=mainblue}
+%\setbeamercolor{block body alerted}{fg=black,bg=orange!10}
+\setbeamercolor{alert block title}{fg=mintcream, bg=alertred} % Título: Texto claro sobre el acento alertred
+\setbeamercolor{alert block body}{fg=charcoal, bg=alertred!15!mintcream} % Cuerpo: Fondo muy suave de alertred
+
+%\setbeamercolor{item}{fg=accentgreen}
+%\setbeamercolor{palette primary}{fg=white,bg=blue!80!black}
+\setbeamercolor{item}{fg=blue!80!black}
+\setbeamercolor{palette primary}{fg=white,bg=blue!80!black}
+
+
+%Colores de abajo
+%\setbeamercolor{footline left}{fg=white,bg=secondblue}
+%\setbeamercolor{footline center}{fg=mainblue,bg=lightgrey}
+%\setbeamercolor{footline right}{fg=white,bg=accentgreen}
+
+\setbeamercolor{footline left}{fg=white,bg=charcoal}
+\setbeamercolor{footline center}{fg=white,bg=mint}
+\setbeamercolor{footline right}{fg=white,bg=charcoal}
+% ========================================================================
+
+% ============================= Configuración ============================
+\newbool{UAGro}
+\setbool{UAGro}{true}
+
+\ifbool{UAGro}{
+	\renewcommand{\deedegree}{UAGro}
+	\renewcommand{\deedegreelong}{Universidad Autónoma de Guerrero\\-- Facultad de Matemáticas --}
+	\providecaptionname{english}{\deedegreelong}{Universidad Autónoma de Guerrero\\-- Facultad de Matemáticas --}
+	\providecaptionname{español}{\deedegreelong}{Universidad Autónoma de Guerrero\\-- Facultad de Matemáticas --}
+	\institute[]{\deedegreelong}
+	%\renewcommand{\course}{Tesis/Licenciatura}
+	%\providecaptionname{english}{\course}{Tesis/Licenciatura}
+	%\providecaptionname{español}{\course}{Tesis/Licenciatura}
+	\renewcommand{\footerlabel}{}
+}{}
+
+% ========================================================================
+
+% ======================= Cinfiguración del título =======================
+\makeatletter
+\setbeamertemplate{title page}
+{
+	\ifdefined\datename \date{\datename} \else \date{\today} \fi
+	
+	\vbox{}
+	\vfill
+	\begingroup
+	\centering
+	{\scshape\scriptsize \course}\vskip0.5em
+	
+	% --- Título con Fuente --- Aquí el --- \fontsize{tamaño de la letra}{tamaño del espacio entre lineas} ---
+	\begin{beamercolorbox}[sep=4pt,center]{title}
+	{\lato\Large\fontsize{16}{16}\selectfont
+		\color{white}
+		\inserttitle\par}
+		\ifx\insertsubtitle\@empty%
+		\else%
+		\vskip0.1em%
+		{\usebeamerfont{subtitle}\normalsize\insertsubtitle\par}%
+		\fi%     
+	\end{beamercolorbox}%
+	
+%	% --- Título sin Fuente ---
+%	\begin{beamercolorbox}[sep=4pt,center]{title}
+%		\usebeamerfont{title}\LARGE\inserttitle\par%
+%		\ifx\insertsubtitle\@empty%
+%		\else%
+%		\vskip0.1em%
+%		{\usebeamerfont{subtitle}\normalsize\insertsubtitle\par}%
+%		\fi%     
+%	\end{beamercolorbox}%
+	
+	\vspace{0.1cm}
+	
+	\vskip0.5em\par
+	
+	% --- Autor ---
+	\begin{beamercolorbox}[sep=0.0mm,center]{author}
+		\usebeamerfont{author}\insertauthor\\
+		{}
+	\end{beamercolorbox}%
+	
+	\vspace{0.1cm}
+	
+	% --- UAGro ---
+	\vspace{0.2cm}
+	\begin{beamercolorbox}[sep=0.0mm,center]{institute}
+		\vspace{0.2cm}
+		\noindent
+		{\color{mainblue}\rule{0.36\linewidth}{0.5pt}} %Linea izquierda
+		\hspace{0.1cm}
+		{\scriptsize\bfseries\deedegree}
+		\hspace{0.1cm}
+		{\color{mainblue}\rule{0.36\linewidth}{0.5pt}} %Linea derecha
+		\par\vspace{0.1cm}
+		\usebeamerfont{institute}\insertinstitute
+	\end{beamercolorbox}
+	
+	\vskip0.5em
+	%4.6
+	% --- Logos ---
+	\begin{tabularx}{1\textwidth}{ X <{\centering\arraybackslash}m{6cm} X >{\centering\arraybackslash}m{1.2cm} X}
+		~ & \includegraphics[width=2cm,keepaspectratio]{Uagro} & ~~ & \includegraphics[width=2cm,keepaspectratio]{MMA-LOGO} & ~\\
+	\end{tabularx}\\
+	
+	\endgroup
+	\vfill
+}
+\makeatother
+
+%\endinput
+
+% ========================================================================
+
+% ===============================
+% Barra inferior (footline)
+% ===============================
+
+\setbeamertemplate{footline}{
+	\leavevmode%
+	\hbox{%
+		% --- Parte izquierda ---
+		\begin{beamercolorbox}[wd=.3\paperwidth,ht=2.5ex,dp=1.5ex,left]{footline left}
+			\usebeamerfont{footline left}\hspace{1em}\footleft
+		\end{beamercolorbox}%
+		% --- Parte central ---
+		\begin{beamercolorbox}[wd=.4\paperwidth,ht=2.5ex,dp=1.5ex,center]{footline center}
+			\usebeamerfont{footline center}\footcenter
+		\end{beamercolorbox}%
+		% --- Parte derecha ---
+		\begin{beamercolorbox}[wd=.3\paperwidth,ht=2.5ex,dp=1.5ex,right]{footline right}
+			\usebeamerfont{footline right}\footright\hspace{1em}
+		\end{beamercolorbox}%
+	}
+	\vskip0pt%
+}
+% ========================================================================

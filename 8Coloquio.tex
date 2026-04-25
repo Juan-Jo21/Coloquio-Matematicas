@@ -1,0 +1,802 @@
+\documentclass{beamer}
+\usepackage{fontspec}
+\usepackage{makeidx}
+\usepackage{subfigure}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish,es-tabla]{babel}
+%\usepackage{xcolor}
+\usepackage{svg}
+\usepackage[siunitx, RPvoltages]{circuitikz}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{calligra}
+\usepackage{subcaption}
+\usepackage{ragged2e} %para justificar
+
+%\usepackage{lmodern}
+%\usepackage{fourier}
+\usepackage{pgf,tikz}
+%\usepackage{pgfplots}
+%\pgfplotsset{compat=1.18}
+\usepackage{mathrsfs}
+\usepackage{hyperref}
+\usetikzlibrary{arrows}
+
+% ========================================================================
+% ===== DEFINIR VARIABLES REQUERIDAS POR EL TEMA =====
+\newcommand{\course}{}
+\newcommand{\deedegree}{Facultad de Matemáticas}
+
+\newtheorem{defi}{Definición}
+\newtheorem{teo}{Teorema}
+\newtheorem{lema}{Lema}
+
+
+% Tema base Madrid
+%\usetheme{Madrid}
+
+% Cargamos nuestro estilo
+\usepackage{Tema3}
+
+% Antes de \begin{document}
+\renewcommand{\footleft}{UAGro}  % Texto de la izquierda
+\renewcommand{\footcenter}{Tesis Maestria} % Texto centrado
+\renewcommand{\footright}{Pag. \insertframenumber} % Texto fijo y páginas
+
+% ========================================================================
+\title{\\
+\vspace{0.4mm}
+Problema inverso bayesiano aplicado a la resistencia a la insulina en adultos jóvenes\\
+\vspace{0.4mm}
+}
+%\title{\textcolor{MidnightBlue}{dfgh}\\
+%	Tema de diabetes e insulina\\
+%\textcolor{MidnightBlue}{dfgh}}
+%\subtitle{Tema Madrid modificado}
+\author{Juan José Bello González\\ Director de Tesis:\\ Dr. Cruz Vargas de León}
+%\institute{UAGro}  % Requerido por el template
+\date{\today}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+
+%//////////////////////////////////////////////////////////////////////////
+
+\begin{frame}{Estructura}
+    \begin{itemize}
+        \item Introducción
+        \vspace{0.3cm}
+        \item Antecedentes
+        \vspace{0.3cm}
+        \item Planteamiento del problema
+        \vspace{0.3cm}
+        \item Justificación
+        \vspace{0.3cm}
+        \item Objetivos particulares
+        \vspace{0.3cm}
+        \item Objetivo general
+        \vspace{0.3cm}
+        \item Metodología
+    \end{itemize}
+\end{frame}
+
+%//////////////////////////////////////////////////////////////////////////
+	\begin{frame}{Introducción}
+		\justifying
+		{\calligra L} as ecuaciones diferenciales no lineales se han usado como modelos dinámicos para describir procesos biológicos.\\
+		
+		\vspace{0.2cm}
+		
+		Una de sus principales aplicaciones es la estimación de parámetros biológicos que no pueden medirse de manera directa. Para ello, se requiere contar con mediciones de al menos una de las variables de estado del modelo, las cuales pueden obtenerse a partir de experimentos diseñados o de observaciones empíricas.\\
+		
+		\vspace{0.2cm}
+		
+		\textit{Problema inverso}, su finalidad es inferir los valores de los parámetros desconocidos del modelo a partir de datos observados.\\
+		
+		\vspace{0.2cm}
+		
+		En particular, el \textit{problema inverso bayesiano} adopta un enfoque probabilístico para la estimación de parámetros, considerando tanto la incertidumbre en los datos como en el modelo mismo.
+		
+	\end{frame}
+
+%//////////////////////////////////////////////////////////////////////////
+
+    \begin{frame}
+    \begin{center}
+        CLAMP Hiperinsulinémico-Euglucémico
+    \end{center}
+		\begin{figure}[htb]
+            \centering
+            \includegraphics[width=0.8\textwidth]{Mapa-Tesis}
+            %\caption{}
+            %\label{}
+        \end{figure}
+	\end{frame}
+
+%//////////////////////////////////////////////////////////////////////////
+
+    %\begin{frame}
+	%	\begin{figure}[htb]
+    %        \centering
+    %        \includegraphics[width=0.5\textwidth]{grafico_ogtt}
+    %        %\caption{}
+    %        %\label{}
+    %    \end{figure}
+	%\end{frame}
+
+%//////////////////////////////////////////////////////////////////////////
+
+\begin{frame}
+\begin{center}
+    Prueba Oral de Tolerancia a la Glucosa
+\end{center}
+\begin{columns}[T]   % [T] alinea por la parte superior
+    \begin{column}{0.49\textwidth}
+        \centering
+        \includegraphics[width=0.8\linewidth]{grafico_ogtt}\\
+        %\vspace{0.5cm}
+        %\small Gráfico de la curva OGTT
+    \end{column}
+    \hfill
+    \begin{column}{0.49\textwidth}
+        \centering
+        \includegraphics[width=0.8\linewidth]{DrinkOGT}\\
+        %\vspace{0.5cm}
+        %\small Bebida de glucosa utilizada (75 g)
+    \end{column}
+\end{columns}
+\end{frame}
+
+%//////////////////////////////////////////////////////////////////////////
+
+    \begin{frame}
+    \justifying
+		\begin{columns}[t]
+        
+        % Columna Izquierda: Lo que tienes (Datos y Modelo)
+        \begin{column}{0.48\textwidth}
+            \begin{block}{Ventajas y desventajas Clamp}
+                \begin{itemize}
+                    \small % Letra un poco más chica para que quepa bien
+                    \item[] \textbf{Ventajas}
+                    \item La prueba hiperinsulinémica euglucémica es el estándar de oro para la medición de la RI
+                    \vspace{0.2cm}
+                    \item Permite conocer la cantidad de glucosa metabolizada por unidad de concentración de insulina plasmática, que es la mejor manera de evaluar la sensibilidad a la insulina muscular en humanos.
+                    \vspace{0.2cm}
+                    \item[] \textbf{Desventajas}
+                    \item Solo personal capacitado puede realizar esta prueba, que es muy compleja %y requiere el uso de al menos tres bombas (dos para la infusión de insulina y glucosa y una para solución salina) y un glucómetro al lado de la cama.
+                \end{itemize}
+            \end{block}
+        \end{column}
+
+        % Columna Derecha: Lo que harás (Análisis)
+        \begin{column}{0.48\textwidth}
+            \begin{block}{Ventajas y limitaciones OGTT}
+                \begin{itemize}
+                    \small
+                    \item menos costoso que el clamp
+                    \vspace{0.2cm}
+                    \item El número de muestras de sangre varia de 3 a 5 muestras
+                    \vspace{0.2cm}
+                    \item Es importante señalar que existe una gran variación entre laboratorios en la medición de las concentraciones de insulina. %(25 $\%$)
+                \end{itemize}
+            \end{block}
+        \end{column}
+        
+    \end{columns}
+	\end{frame}
+
+%//////////////////////////////////////////////////////////////////////////
+
+    \begin{frame}{Antecedentes}
+		%Modelo Ackerman 1964\\
+        \justifying
+
+        \begin{block}{Modelo Matemático Ackerman (1964)}
+        \end{block}
+
+        \begin{itemize}
+            \item Propusieron simplificar la compleja fisiología glucosa-insulina (que tenía más de 16 parámetros) a un sistema de parámetros agrupados.
+            \item Modelaron el sistema como un oscilador armónico amortiguado forzado por la carga de glucosa.
+            \item La Ecuación muestra la solución general para la desviación de glucosa $g(t)$:
+
+            $$\ddot{g} + 2\alpha \dot{g} + \omega_0^2 g = 0$$
+            Solución
+            $$g(t) = A e^{- \alpha t} \sin (\omega t)$$
+
+            
+            \item Descubrieron que los parámetros del modelo (específicamente la frecuencia natural $\omega_0$) podían distinguir entre pacientes diabéticos y sanos.
+        \end{itemize}
+
+        
+
+        %modelo del oscilador armónico amortiguado, que describe la desviación de la glucosa $g(t)$ después de la carga de azúcar\\
+
+        %\vspace{0.2cm}
+        
+        %aunque simple, captura la "responsividad" del cuerpo con parámetros que tienen significado biológico (como $\alpha$, la tasa de eliminación).
+
+        
+
+        %clamp\\
+        %usaremos el modelo Ackerman\\
+        %contruir el indice a partir de los parámetros del modelo de Ackerman\\
+        %construir un valor de corte (como intervalos)\\
+        %tienen o no tienen alteraciones (resistencia insulina) de 19 a 59 años.
+	\end{frame}
+
+%//////////////////////////////////////////////////////////////////////////
+
+    \begin{frame}
+        \begin{figure}[htb]
+            \centering
+            \includegraphics[width=0.7\textwidth]{SVM}
+            %\caption{}
+            %\label{}
+        \end{figure}
+    \end{frame}
+
+%//////////////////////////////////////////////////////////////////////////
+
+    \begin{frame}
+		\begin{block}{Estimación y Clasificación: Vargas et al. (2020)}
+		\end{block}
+        \justifying
+        \begin{itemize}
+            \item Retomaron el modelo de Ackerman pero lo abordaron como un problema inverso para estimar parámetros usando un enfoque Bayesiano (MCMC).
+            \vspace{0.2cm}
+            \item Demostraron que la estimación bayesiana hace que los parámetros (especialmente $\alpha$) sean robustos y estables, superando problemas de sensibilidad reportados anteriormente.
+            \vspace{0.2cm}
+            \item Usaron la máquina de vectores de soporte (SVM)  para clasificar un vector de características $(A, \alpha)$ en lugar de un solo número.\\
+            Eje $x: \ A$ (pico)\\
+            Eje $y: \ \alpha$ (tasa de eliminación)
+        \end{itemize}
+	\end{frame}
+
+%//////////////////////////////////////////////////////////////////////////
+
+    \begin{frame}
+        \begin{figure}[htb]
+            \centering
+            \includegraphics[width=0.7\textwidth]{Var}
+            %\caption{}
+            %\label{}
+        \end{figure}
+    \end{frame}
+
+%//////////////////////////////////////////////////////////////////////////
+%//////////////////////////////////////////////////////////////////////////
+
+    %\begin{frame}{Antecedentes}
+
+%Revisión Bibliográfica: Artículos de Resistencia a la Insulina
+		
+    %		\begin{block}{\textit{A mathematical model of the euglycemic hyperinsulinemic clamp}}
+		%      \end{block}
+		
+	%	El estudio busca mejorar la interpretación de los datos obtenidos mediante el EHC, especialmente en sujetos obesos, donde se observa que la captación de glucosa continúa aumentando más allá de las 2 horas tradicionales del procedimiento.\\
+
+     %   \vspace{0.2cm}
+        
+     %   El modelo matemático propuesto permite extraer más información de los datos, identificando componentes específicos de la resistencia a la insulina.
+        
+	%\end{frame}
+
+%//////////////////////////////////////////////////////////////////////////
+	%\begin{frame}
+	%	\begin{block}{\textit{Bayesian Analysis of Glucose dynamics during the Oral Glucose Tolerance Test (OGTT)}}
+	%	\end{block}
+		
+	%	utilizan un enfoque bayesiano para inferir parámetros clave relacionados con la secreción de insulina y glucagón, la absorción gastrointestinal de glucosa y la concentración de glucosa en sangre.\\
+
+     %   \vspace{0.2cm}
+        
+	%	Se utiliza un sistema de EDO para describir la interacción entre la glucosa en sangre, la insulina, el glucagón y la glucosa en el tracto gastrointestinal.\\
+
+     %   \vspace{0.2cm}
+		
+     %   utilizan métodos de Monte Carlo mediante Cadenas de Markov (MCMC).
+	%\end{frame}
+
+%//////////////////////////////////////////////////////////////////////////
+%//////////////////////////////////////////////////////////////////////////
+
+    \begin{frame}{Planteamiento del Problema}
+        \justifying
+		\begin{itemize}
+		    \item La prevalencia de prediabetes y diabetes es crítica ($18.3 \%$ total según ENSANUT 2022).
+            \vspace{0.2cm}
+            \item La Resistencia a la Insulina (RI) es el precursor silencioso, especialmente en jóvenes.
+            \vspace{0.2cm}
+            \item Existen diversos índices clínicos para estimar la resistencia a la insulina, muchos de los cuales se basan en la OGTT. Aunque estos índices son ampliamente usados por su simplicidad, presentan limitaciones importantes, como que %dependen de mediciones puntuales, pueden ser sensibles al ruido experimental y, 
+            en algunos casos, no capturan adecuadamente la dinámica fisiológica del sistema glucosa–insulina.
+            \vspace{0.2cm}
+            \item En este contexto surge el problema central de esta investigación: ¿es posible construir un índice de resistencia a la insulina a partir de los parámetros del modelo de Ackerman basados en la OGTT?
+		\end{itemize}
+
+        \vspace{0.2cm}
+
+        %\begin{center}
+        %    \begin{tabular}{|l|c|c|c|c|c|}
+        %    \hline
+        %    \textbf{Caracteristica} & \textbf{Clamp (Estandar de Oro)} & \textbf{OGTT (Prueba Clínica)} \\ \hline
+        %    Precisión   & Alta & Variable  \\ \hline
+        %    Costo   & Alto & Bajo   \\ \hline
+        %    Invasivo     &  Si & No \\ \hline
+        %    Información & Directa & Indirecta (modelo) \\ \hline
+        %    \end{tabular}
+        %\end{center}
+	\end{frame}
+
+%//////////////////////////////////////////////////////////////////////////
+
+    \begin{frame}{Justificación}
+        \justifying
+		\begin{itemize}
+		    %\item La prevalencia combinada de diabetes y prediabetes es del $18.3 \%$ (ENSANUT 2022).
+            \item Enfocarse en adultos jóvenes permite la detección temprana y la prevención de complicaciones crónicas, lo cual es más efectivo que tratar la enfermedad avanzada.
+            \vspace{0.2cm}
+            \item El Clamp (estándar de oro) es inviable para la poblacion por su costo y complejidad.
+            \vspace{0.2cm}
+            \item En este trabajo se propone potenciar la OGTT %(prueba barata y accesible) 
+            para que ofrezca un diagnóstico de alta precisión, haciendo la detección de resistencia a la insulina accesible a la población general.
+            \vspace{0.2cm}
+            \item Se implementará el Problema Inverso Bayesiano que permite cuantificar la incertidumbre en la estimación de parámetros biológicos, superando las limitaciones de los métodos deterministas tradicionales.
+		\end{itemize}
+	\end{frame}
+
+%//////////////////////////////////////////////////////////////////////////
+
+    \begin{frame}{Objetivo General}
+        \justifying
+		Proponer y validar un nuevo índice de resistencia a la insulina para adultos jóvenes, basado en los parámetros del modelo Ackerman $(A, \alpha)$ estimados mediante un enfoque bayesiano a partir de datos de la OGTT,  utilizando la técnica de CLAMP como estándar de referencia.
+	\end{frame}
+
+%//////////////////////////////////////////////////////////////////////////
+
+	\begin{frame}{Objetivos particulares}
+    
+        \begin{itemize}
+            \item Limpiar la base de datos.
+            \vspace{0.2cm}
+            \item Elegir las distribuciones apriori de los parámetros.
+            \vspace{0.2cm}
+            \item Estimar los intervalos de credibilidad de los parámetros del modelo.
+            \vspace{0.2cm}
+            \item Analizar la sensibilidad de los parámetros estimados.
+            \vspace{0.2cm}
+            \item Construir un índice a partir de los parámetros estimados.
+            \vspace{0.2cm}
+            \item Determinar el valor de corte del índice a partir de la curva ROC
+        \end{itemize}
+	\end{frame}
+
+%//////////////////////////////////////////////////////////////////////////
+
+    %\begin{frame}{Metodología 1}
+
+    %\begin{itemize}
+    %    \item Se tiene un grupo de pacientes de $19$ a $59$ años
+    %    \item Se les realizaron tanto la prueba clamp hiperinsulinémico-euglucémico como la prueba oral de tolerancia a la glucosa (OGTT).
+    %    \item Se asumirá que la respuesta a la glucosa $g(t)$ sigue la solución del modelo Ackerman.
+
+    %    $$g(t) = A e^{-\alpha t} cos (\omega t - \delta)$$
+
+    %    \item Usaremos un enfoque bayesiano para estimar los parámetros de modelo para cada paciente.
+
+    %    \item Obtener la distribución posterior de los parametros (tasa de eliminación y pico de glucosa)
+	%	\item Construir el índice a partir de los parámetros
+    %    \item El resultado será un valor de corte  en el mapa que separe a los pacientes resistentes de los sensibles.
+    %\end{itemize}
+		
+	%\end{frame}
+
+%//////////////////////////////////////////////////////////////////////////
+
+    %\begin{frame}{Metodología 2}
+    %\begin{itemize}
+    %    \item \textbf{Población:} Se tiene un grupo de pacientes de $19$ a $59$ años.
+    %    \item \textbf{Validación:} Se cuenta con \textbf{Clamp} (Estándar de Oro) y OGTT para cada paciente.
+    %    \item \textbf{Modelo Teórico:} Se asume la solución del modelo de Ackerman:
+    %    $$g(t) = A e^{-\alpha t} \cos (\omega t - \delta)$$
+    %    \item \textbf{Estimación:} Enfoque \textbf{bayesiano} para inferir los parámetros ($A, \alpha, \omega, \delta$).
+    %    \item \textbf{Construcción del Índice:} Usar las distribuciones posteriores de la tasa de eliminación ($\alpha$) y pico de glucosa ($A$).
+    %    \item \textbf{Clasificación:} Determinar un \textbf{valor de corte} que separe pacientes resistentes de sensibles (validado con el Clamp).
+    %\end{itemize}
+%\end{frame}
+
+%//////////////////////////////////////////////////////////////////////////
+
+    \begin{frame}{Metodología}
+
+    % Dividimos la pantalla en dos columnas para aprovechar el espacio
+    \justifying
+    \begin{columns}[t]
+        
+        % Columna Izquierda: Lo que tienes (Datos y Modelo)
+        \begin{column}{0.48\textwidth}
+            \begin{block}{1. Datos y Modelo}
+                \begin{itemize}
+                    \small % Letra un poco más chica para que quepa bien
+                    \item \textbf{Muestra:} Pacientes con prueba
+                    \textbf{Clamp} y OGTT simultáneas, con el objetivo de evaluar la concentración de glucosa e insulina.
+                    \vspace{0.2cm}
+                    \item \textbf{Modelo de Ackerman:}
+                    $$g(t) = A e^{-\alpha t} \cos (\omega t - \delta)$$
+                    %\vspace{0.1cm}
+                    %\item Se asume que la dinámica $g(t)$ sigue esta solución.
+                \end{itemize}
+            \end{block}
+        \end{column}
+
+        % Columna Derecha: Lo que harás (Análisis)
+        \begin{column}{0.48\textwidth}
+            \begin{block}{2. Estrategia Bayesiana}
+                \begin{itemize}
+                    \small
+                    \item \textbf{Inferencia:} Estimar la distribución posterior de los parámetros para cada paciente.
+                    \vspace{0.2cm}
+                    \item \textbf{Índice:} Definir el par $(A, \alpha)$ como vector de características.
+                    \vspace{0.2cm}
+                    \item \textbf{Clasificación:} Hallar el \textbf{valor de corte} del índice   $(A, \alpha)$  usando la Curva ROC frente al diagnóstico del Clamp.
+                \end{itemize}
+            \end{block}
+        \end{column}
+        
+    \end{columns}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%===========================================================
+% NUEVA SECCIÓN: IMPLEMENTACIÓN BAYESIANA
+%===========================================================
+\section{Implementación y Resultados Preliminares}
+
+\begin{frame}{Inferencia Bayesiana}
+    \begin{itemize}
+        \item Se desarrolló un \textbf{entorno computacional} para la inferencia de la base de datos (n=50).
+        \item \textbf{Criterio Clínico en Priors:} Los límites máximos obtenidos por Mínimos Cuadrados fueron ajustados bajo estricto rigor fisiológico. 
+        \item \textbf{Ejemplo (Amplitud A):} Limitada a $300$ mg/dL para evitar simulaciones de estados hiperglucémicos biológicamente inviables para la población de estudio (adultos jóvenes).
+        \item \textbf{Algoritmos MCMC:} 
+        \begin{itemize}
+            \item \textbf{NUTS} (No-U-Turn Sampler) para modelos continuos.
+            \item \textbf{Metropolis-Hastings} para manejar derivadas en modelos fraccionarios.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+%===========================================================
+% NUEVA SECCIÓN: EXPANSIÓN MATEMÁTICA
+%===========================================================
+\begin{frame}{Expansión de Modelos Fisiológicos}
+    Aunque el problema original plantea el modelo clásico de Ackerman, nuestra investigación escaló a la implementación simultánea de \textbf{tres modelos dinámicos}:
+    \vspace{0.3cm}
+    
+    \begin{enumerate}
+        \item \textbf{Ackerman:} Decaimiento exponencial.
+        \begin{equation*}
+            g(t) = G_{basal} + A \cdot e^{-\alpha t} \cdot \cos(\omega t - \delta)
+        \end{equation*}
+        \item \textbf{Tsallis:} Introduce el parámetro $q$.
+        \begin{equation*}
+            g(t) = G_{basal} + A \cdot e_q(-\alpha t) \cdot \cos(\omega t - \delta)
+        \end{equation*}
+        \item \textbf{Mittag-Leffler:} Dinámica de relajación con restricción física $\beta \le 0.99$.
+        \begin{equation*}
+            g(t) = G_{basal} + A \cdot E_\beta(-(\alpha t)^\beta) \cdot \cos(\omega t - \delta)
+        \end{equation*}
+    \end{enumerate}
+\end{frame}
+
+%===========================================================
+% NUEVA SECCIÓN: CLASIFICACIÓN
+%===========================================================
+\begin{frame}{Clasificación Morfológica}
+    \begin{block}{Problema}
+        Los índices tradicionales no capturan la dinámica real de la curva.
+    \end{block}
+    
+    \begin{block}{Solución Implementada}
+        Se incorporó un algoritmo de detección de máximos locales en la simulación Bayesiana ($t \in [0, 180]$) para clasificar clínicamente cada curva:
+        \begin{itemize}
+            \item \textbf{Monofásica:} Respuesta insulínica estándar (1 pico).
+            \item \textbf{Bifásica/Polifásica:} Posible disfunción temprana o "tartamudeo" pancreático ($\ge$ 2 picos).
+        \end{itemize}
+    \end{block}
+    
+    \textit{Este clasificador ya opera en paralelo con la inferencia de los parámetros ($A, \alpha, q, \beta$), preparándonos para la Curva ROC final.}
+\end{frame}
+
+%===========================================================
+% GRÁFICAS
+%==========================================================
+
+%===========================================================
+% GRÁFICAS ACKERMAN
+%===========================================================
+\begin{frame}{Resultados: Modelo de Ackerman}
+    \begin{center}
+        Captura de dinámicas Monofásicas y Bifásicas.
+    \end{center}
+    \begin{columns}[T]   
+        \begin{column}{0.49\textwidth}
+            \centering
+            \includegraphics[width=1.0\linewidth]{Ackerman_Paciente_35}\\
+        \end{column}
+        \hfill
+        \begin{column}{0.49\textwidth}
+            \centering
+            \includegraphics[width=1.0\linewidth]{Ackerman_Paciente_13}\\
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Limitaciones}
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width=0.5\textwidth]{Ackerman_Paciente_19}
+        \caption{Paciente 19: El mal ajuste evidencia dinámicas de retraso complejas que motivan la futura transición a un sistema de EDO.}
+    \end{figure}
+\end{frame}
+
+
+
+
+
+
+
+
+%===========================================================
+% GRÁFICAS TSALLIS
+%===========================================================
+\begin{frame}{Resultados: Modelo de Tsallis}
+    \begin{center}
+    \end{center}
+    \begin{columns}[T]   
+        \begin{column}{0.49\textwidth}
+            \centering
+            \includegraphics[width=1.0\linewidth]{Tsallis_Paciente_15}\\
+        \end{column}
+        \hfill
+        \begin{column}{0.49\textwidth}
+            \centering
+            \includegraphics[width=1.0\linewidth]{Tsallis_Paciente_43}\\
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Limitación Tsallis}
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width=0.5\textwidth]{Tsallis_Paciente_19}
+        \caption{Paciente 19 bajo Tsallis: El aumento de flexibilidad no compensa la falta de multicompartimentos.}
+    \end{figure}
+\end{frame}
+
+
+
+
+
+
+
+
+%===========================================================
+% GRÁFICAS MITTAG-LEFFLER
+%===========================================================
+\begin{frame}{Resultados: Mittag-Leffler}
+    \begin{center}
+    \end{center}
+    \begin{columns}[T]   
+        \begin{column}{0.49\textwidth}
+            \centering
+            \includegraphics[width=1.0\linewidth]{ML_Paciente_50}\\
+        \end{column}
+        \hfill
+        \begin{column}{0.49\textwidth}
+            \centering
+            \includegraphics[width=1.0\linewidth]{ML_Paciente_15}\\
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Perspectivas Futuras: Dinámica Glucosa-Insulina}
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width=0.5\textwidth]{ML_Paciente_19}
+        \caption{Paciente 19 bajo ML: Evidencia definitiva de la necesidad de modelar con EDO}
+    \end{figure}
+\end{frame}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{frame}{Diagnóstico del Algoritmo MCMC}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \centering
+            \includegraphics[width=1.0\linewidth]{TracePlot_Paciente19}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \small
+            \textbf{Validación de Convergencia:}
+            \begin{itemize}
+                \item Las gráficas de densidad (izquierda) muestran que las 4 cadenas paralelas convergen a la misma distribución posterior.
+                \item Las trazas (derecha) exhiben un mezclado homogéneo, indicando estabilidad estacionaria.
+                \item \textbf{Criterio Numérico:} El estadístico $\hat{R} \approx 1.00$ confirma formalmente la convergencia para todos los parámetros analizados.
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
+
+
+
+%//////////////////////////////////////////////////////////////////////////
+
+%    \begin{frame}{Metodologia}
+%        \textbf{Modelo de  la prueba oral de tolerancia a la
+%glucosa}
+
+%Para analizar la dinámica conjunta de la glucosa ($G(t)$) e insulina ($I(t)$) durante la prueba OGTT, se propone un modelo basado en ecuaciones diferenciales ordinarias (EDO). Este enfoque permite describir el comportamiento temporal de ambas variables en respuesta a la carga oral de glucosa. El modelo se plantea como un sistema de ecuaciones no lineales de la forma general:
+%\begin{equation}\label{GluIns}
+%\begin{array}{lllllllll}
+%&G^{\prime}(t)=f_1(G,I),\
+%\\
+%&I^{\prime}(t)=f_2(G,I).
+%\end{array}
+%\end{equation}
+%    \end{frame}
+
+%//////////////////////////////////////////////////////////////////////////
+
+    %\begin{frame}{}
+    %    \textbf{Base de datos}
+
+    %Se cuenta con una base de datos de 40 pacientes jóvenes a quienes se les realizaron tanto la prueba clamp hiperinsulinémico-euglucémico como la prueba oral de tolerancia a la glucosa (OGTT). En esta última, los participantes ingirieron una solución que contenía 75 gramos de glucosa, tras lo cual se tomaron muestras de sangre en los tiempos 0, 30, 60, 90, 120 y 190 minutos posteriores a la ingesta, con el objetivo de evaluar la concentración de glucosa e insulina.
+    %\end{frame}
+    
+%////////////////////////////////////////////////////////////////////////////
+
+
+%\begin{frame}{Cronograma}
+%\begin{center}
+%    \begin{tabular}{|l|c|c|c|}
+%    \hline
+%    \textbf{Actividad} & \textbf{Semestre 1} & \textbf{Semestre 2} & \textbf{Semestre 3} \\ \hline
+    
+%    Revisión bibliográfica                 & X &   &   \\ \hline
+%    Elaboración del protocolo              & X &  &   \\ \hline
+%    Limpiar la base de datos               &   & X &   \\ \hline
+%    Estimar los intervalos de credibilidad &   & X &  \\ \hline
+%    Analizar la sensibilidad de parámetros &   &  X & X \\ \hline
+%    Construir un índice a partir de parámetros &   &   & X \\ \hline
+%      Redacción de la tesis &  X  &  X  & X \\ \hline
+%      Determinar el valor de corte del índice &    &    & X \\ \hline
+%    \end{tabular}
+%\end{center}
+%\end{frame}
+
+%//////////////////////////////////////////////////////////////////////////
+
+    \begin{frame}
+		\begin{thebibliography}{8}
+        
+            \bibitem{Ackerman1964}Ackerman, E., Rosevear, J. W., \& McGuckin, W. F. (1964). A Mathematical Model of the Glucose-tolerance test. \textit{Physics in Medicine and Biology, 9}(2), 203-213. doi: \href{https://doi.org/10.1088/0031-9155/9/2/307}{10.1088/0031-9155/9/2/307}
+
+            \bibitem{Vargas2020}Vargas, P., Moreles, M. A., Peña, J., Monroy, A., \& Alavez, S. (2020). Estimation and SVM classification of glucose-insulin model parameters from OGTT data: a comparison with the ADA criteria. \textit{International Journal of Diabetes in Developing Countries}. doi: \href{https://doi.org/10.1007/s13410-020-00851-2}{10.1007/s13410-020-00851-2}
+
+            \bibitem{Kuschinski2019}Kuschinski, N. E., Christen, J. A., Monroy, A., \& Alavez, S. (2019). Modeling oral glucose tolerance test (OGTT) data and its Bayesian inverse problem. \textit{arXiv}. Recuperado de \href{https://arxiv.org/abs/1601.04753}{https://arxiv.org/abs/1601.04753}
+
+            \bibitem{Picchini2005}Picchini, U., De Gaetano, A., Panunzi, S., Ditlevsen, S., \& Mingrone, G. (2005). A mathematical model of the euglycemic hyperinsulinemic clamp. \textit{Theoretical Biology and Medical Modelling, 2}, Art\'{i}culo 44. doi: \href{https://doi.org/10.1186/1742-4682-2-44}{10.1186/1742-4682-2-44}
+
+        \end{thebibliography}
+	\end{frame}
+
+%//////////////////////////////////////////////////////////////////////////
+
+    %\begin{frame}[plain, c] % 'plain' quita encabezados, 'c' centra verticalmente
+    %    \centering
+    %    \Huge \textbf{\textcolor{structure}{¡Gracias!}} \\ % 'structure' usa el color del tema
+        %\vspace{1cm}
+        %\Large ¿Preguntas?
+    %\end{frame}
+
+    \begin{frame}[plain, c] 
+        \centering
+         %\fontsize{tamaño}{interlineado}
+         %Aquí usamos tamaño 60pt (Huge suele ser ~25pt)
+        \fontsize{40}{70}\selectfont \textbf{\textcolor{structure}{¡Gracias!}} 
+    \end{frame}
+    
+%///////////////////////////////////////////////////////////////////////////
+    %\begin{frame}
+    %    El objetivo principal es utilizar datos de la Prueba Oral de Tolerancia a la Glucosa (OGTT) para inferir, mediante un modelo dinámico basado en ecuaciones diferenciales, parámetros relacionados con la resistencia a la insulina en jóvenes, un factor de riesgo crucial para prediabetes y diabetes.\\
+		
+	%	\vspace{0.2cm}
+		
+	%	\begin{itemize}
+	%		\item limpiar la base de datos
+	%		\item obtener datos
+	%		\item \% de prediabetes
+	%		\item \% de diabetes diagnosticada y no diagnosticada 
+	%	\end{itemize}
+    %\end{frame}
+	
+%//////////////////////////////////////////////////////////////////////////
+	
+	%\begin{frame}
+	%	El modelo ideal predice un valor de glucosa, pero los datos reales tienen ruido, por lo que usamos un modelo estadístico que incorpora ese error.
+		
+	%	\begin{equation}
+	%		y_{i}(t_i)=H( \mathcal{M}(t_i, \boldsymbol{\theta}))+\varepsilon (t_i), \quad
+	%		i=1,2,\dots,n
+	%		\label{model}
+	%	\end{equation}
+		
+	%	donde:
+	%	\begin{itemize}
+	%		\item $y(t_i)$ es la concentración de glucosa en ayuno ($G(t)$) en el tiempo $t_i$.
+	%		\item $\boldsymbol{\theta}$ es vector de parámetros en la estimación bayesiana.
+	%		\item $H( \mathcal{M}(t_i, \boldsymbol{\theta}))$ es la solución numérica del modelo $\mathcal{M}$ (\ref{GluIns}) con el método $H$. En este caso se usó el método numérico de Runge-Kutta de orden 4.
+	%		\item $\varepsilon(t_i)$ es el error aleatorio en el tiempo $t_i$, los errores son independientes para cada tiempo, normalmente distribuidos con media cero y varianza $\sigma^2$.
+	%	\end{itemize}
+	%\end{frame}
+
+%//////////////////////////////////////////////////////////////////////////
+
+	
+
+%//////////////////////////////////////////////////////////////////////////
+	
+%	\begin{frame}{Bloques de ejemplo}
+%		\begin{block}{Bloque normal}
+%			Texto dentro de un bloque normal.
+%		\end{block}
+%		
+%		\begin{exampleblock}{Bloque de ejemplo}
+%			Texto en un bloque de ejemplo.
+%		\end{exampleblock}
+%		
+%		\begin{alertblock}{Bloque de alerta}
+%			Texto en un bloque de alerta.
+%		\end{alertblock}
+%	\end{frame}
+%	
+%	\begin{frame}{Lista}
+%		\begin{itemize}
+%			\item Primer punto
+%			\item Segundo punto
+%			\item Tercer punto
+%		\end{itemize}
+%	\end{frame}
+	
+\end{document}
